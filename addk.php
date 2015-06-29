@@ -7,6 +7,7 @@ session_start();
 
 */
 
+print 'qweqwe';
 include('mysql.php');
 include('class/CUser.php');
 include('header.php');
