@@ -5,6 +5,7 @@ include('mysql.php');
 include('header.php');
 include('functions.php');
 include('class/CUser.php');
+include "class/CPacient.php";
 
 check_user();
 
@@ -127,90 +128,58 @@ if(isset($_SESSION['user_class']))
                  */
             }
 	    }
-        $query = "SELECT * FROM `pacient` WHERE ".implode($op,$str);
+        $query = "SELECT `id` FROM `pacient` WHERE ".implode($op,$str);
         //print_r($str);
-        print count($search_pac).'<br>';
-        print $query.'<br>';
-    } else $query = "SELECT * FROM `pacient`  WHERE `date_reg`='{$d}' LIMIT $start,$per_page";
+
+
+    } else $query = "SELECT `id` FROM `pacient`  WHERE `date_reg`='{$d}' LIMIT $start,$per_page";
     //$query = "SELECT * FROM `pacient` WHERE `date_reg`>='{$dm[0]}' AND `date_reg`<='{$dm[1]}' LIMIT $start,$per_page";
     //$m = date('m')-1;
 
 
-    /*if(get_browser_info() != 'Chrome')	// Добавление скрипта с календарем, если исползуеьтся браузер не Chrome
-      echo '<link rel="stylesheet" type="text/css" href="calendar/calendar.css"><script src="calendar/calendar.js" type="text/javascript"></script>';*/
-      
     print 'Отображение за период <form action="" method="get"><input name="dview" type="date" value="'.$d.'" class="date"><input type="submit" value="Показать"></form><br><br>
     <table width="100%" cellspacing="0" border="0">';
     print '<tr  class="cap">
         <th width="50px">№</th>
         <th>ФИО</th>
         <th>Дата рождения</th>
-        <!--<th>Полис ОМС</th>
-        <th>Полис ДМС</th>-->
         <th>Дата регистрации</th>
-        <!--<th>Амбулаторная карта</th>-->
         <th>Операции</th>';
-    if($user->premission == $GLOBALS['g_admin'])
+    if(!check_access($user,array($GLOBALS['group_admin'],$GLOBALS['group_gl'])))
         print '<td>Дополнительная информация</td>';
     print '</tr>';
-    //$query = mysql_real_escape_string("SELECT * FROM `pacient` LIMIT $start,$per_page");
     $sql = mysql_query($query) or die(mysql_error());
     $j = $start+1;
+    $pacient = new CPacient();
     while ($row = mysql_fetch_assoc($sql))
     {
+        $pacient->load($row['id']);
         if ($j % 2 == 1)
         {
-	  if($row['isnko'] == $user->premission)
-            print '<tr class="even hovr" style="color: green;">';
-            else print '<tr class="even hovr">';
+            print '<tr class="even hovr">';
         }
         else
-	{
-	  if($row['isnko'] == $user->premission)
-	    print  '<tr class="odd hovr" style="color: green;">';
-	    else print  '<tr class="odd hovr">';
-	}
-        
-            print '<td>'.$j.'</td>
-            <td><a href="pacient.php?id='.$row['id'].'">'.$row['surname'].'&nbsp;'.$row['name'].'&nbsp;'.$row['otchestvo'].'</a></td>
-            <td>'.check_date($row['birdth'],$user->date_format).'</td>';
-            /*$queryd = mysql_real_escape_string("SELECT * FROM `document` WHERE `id`={$row['document']}");
-            $sqld = mysql_query($queryd) or die(mysql_error());
-            $rowd = mysql_fetch_assoc($sqld);
-            $query_karta = "SELECT * FROM `karta` WHERE `pacient_id`='{$row['id']}'";
-            $sql_karta = mysql_query($query_karta) or die(mysql_error());
-            $row_karta = mysql_fetch_assoc($sql_karta);*/
-            
-            /*$query = "SELECT `name` FROM `strahov_oms` WHERE `id`='{$rowd['polis_name']}'";
-            $sql_polis = mysql_query($query) or die(mysql_error());
-            $row_polis = mysql_fetch_assoc($sql_polis);
-            print '<td>'.$rowd['strahovoi'].' - '.$row_polis['name'].'</td>';
-            $query = "SELECT `name` FROM `strahov_oms` WHERE `id`='{$rowd['dms_firma']}'";
-            $sql_polis = mysql_query($query) or die(mysql_error());
-            $row_polis = mysql_fetch_assoc($sql_polis);
-            
-            print '<td>'.$rowd['dms_serianomer'].' - '.$row_polis['name'].'</td>';*/
-            /*if($row_karta['id'] != 0)
-                $str = '<a href="karta.php?id='.$row_karta['id'].'">Просмотр карты</a>';
-                else $str='Карты нету';*/
-            
-            print '<td>'.check_date($row['date_reg'],$user->date_format).' '.date('H:i',strtotime($row['time_reg'])).'</td>';
-            
-            print '<td><a href="pacient.php?id='.$row['id'].'"><img src="themes/img/b_edit.png" title="Редактировать"></a>  
-                <!--<a href="javascript: del_confirm(\''.$j.'\',\''.$row_karta['id'].'\',\''.$row['document'].'\',\''.$row['id'].'\')"><img src="themes/img/b_drop.png" title="Удалить"></a>--></td>';
-            if($user->premission == $GLOBALS['g_admin'])
-            {
-                print '<td>';
-                $arr_p = $GLOBALS['arr_p'];
-                if($row['isnko'] != 0)
-                    print $arr_p[$row['isnko']];
-                $query = "SELECT `id`,`login` FROM `users` WHERE `id`='{$row['user_id']}'";
-                $sql_a = mysql_query($query) or die(mysql_error());
-                $row_a = mysql_fetch_assoc($sql_a);
-                print '; <font color="#30661d">'.$row_a['login'].'</font>';
-                print '</td>';
-            }
-            print '</tr>';
+	    {
+            print  '<tr class="odd hovr">';
+	    }
+        $birdth = check_date($pacient->birdth,$user->date_format);
+        print "<td>$j</td><td><a href=\"".LPU_HOST."pacient.php?id={$pacient->id}\">{$pacient->getPacientName()}</a></td><td>$birdth</td>";
+        print '<td>'.check_date($pacient->date_reg,$user->date_format).' '.date('H:i',strtotime($pacient->time_reg)).'</td>';
+
+        print '<td><a href="'.LPU_HOST.'pacient.php?id='.$pacient_.id.'"><img src="'.LPU_HOST.'themes/img/b_edit.png" title="Редактировать"></a></td>';
+
+        // для администрации
+        if(!check_access($user,array($GLOBALS['group_admin'],$GLOBALS['group_gl'])))
+        {
+            //$arr_p = $GLOBALS['arr_p'];
+            $sql_a = mysql_query("SELECT `name`,`surname`,`otchestvo` FROM `users` WHERE `id`='{$pacient->user_id}' LIMIT 1") or die(mysql_error());
+            $row_a = mysql_fetch_assoc($sql_a);
+            print '<td><span style="color: green; ">';
+            //echo convertFIO($row_a['surname'],$row_a['name'],$row_a['otchestvo']);
+            echo $row_a['surname'],$row_a['name'],$row_a['otchestvo'];
+            print '</span></td>';
+        }
+        print '</tr>';
         $j++;
         $iswhile = true;
     }
@@ -220,7 +189,7 @@ if(isset($_SESSION['user_class']))
       else $argv = '';*/
     print_num_pages($num_pages,$page);
     if (!$iswhile)
-        print '<br><div align="center"><font color="#8B0000"><b>Нет записей</b></font></div>';
+        print '<br><div align="center"><span style="color: #ff0000; "><b>Нет записей</b></span></div>';
     end_html();
 }
 ?>
