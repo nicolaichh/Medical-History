@@ -1,13 +1,10 @@
 <?php
 session_start();
-//рипорпорпорпор
 /*
 
    Добавление новой комиссии
 
 */
-
-print 'qweqwe';
 include('mysql.php');
 include('class/CUser.php');
 include('header.php');
