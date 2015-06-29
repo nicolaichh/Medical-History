@@ -50,7 +50,7 @@ if(isset($_SESSION['user_class']))
     echo "С мобильного телефона";
   }
 
-    print "<h2>{$r['config_value']}</h2>";
+    print "<h2>Клиника {$r['config_value']}</h2>";
 
     $d = date('Y-m-d');
     $query = "SELECT COUNT(id) FROM `vahta` WHERE `date`='{$d}'";
