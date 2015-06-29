@@ -44,6 +44,7 @@ if(isset($_SESSION['user_class']))
     header('Location: user.php?id='.$_GET['id'].'&mode=1');
   }
 
+    // cохранение аватарки
   if(isset($_GET['saveavatar']))
   {
     $uploaddir = 'files/avatars/';
@@ -92,7 +93,7 @@ if(isset($_SESSION['user_class']))
     <td>Аватарка</td>
     <td>
       <div class="gb_6 gbip"></div><br>
-      <form enctype="multipart/form-data" method="post" action="user.php?saveavatar=true&id='.$user->id.'" id="frm_avatar">
+      <form enctype="multipart/form-data" method="post" action="'.LPU_HOST.'user.php?saveavatar=true&id='.$user->id.'" id="frm_avatar">
       <!--<input type="hidden" name="id_user" value="'.$user->id.'">-->
       <input type="file" name="avatar" accept="image/*" onchange="change_avatar()">
       <!--<input type="submit" name="btn_save_avatar" value="Сохранить изображение">-->
