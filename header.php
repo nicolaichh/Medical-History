@@ -371,7 +371,7 @@ function print_search_form($q = '',$plcholder= 'Введите ФИО для п�
 <table cellspacing="0" cellpadding="0" style="height: 27px; padding: 0px;" width="50%">
 <tr>
 <td style="height: 30px;" width="100px"><input type="text" spellcheck="true" name="q" placeholder="<?php echo $plcholder; ?>" style="width: 100%; outline: none; z-index: 6; border-radius: 0px; padding-left: 10px; margin: 0px; height: 20px;" value="<?php echo $q;?>"></td>
-<td width="30px" height="15px"><button class="gbqfb" id="gbqfb" name="btn_search">Искать</button></td>
+<td width="30px" height="15px"><button class="gbqfb" id="gbqfb"> <!-- name="btn_search"-->Искать</button></td>
 </tr>
 </table>
 </form></div><br>
