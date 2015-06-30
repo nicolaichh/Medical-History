@@ -164,8 +164,8 @@ if(isset($_SESSION['user_class']))
             $sql_a = mysql_query("SELECT `name`,`surname`,`otchestvo` FROM `users` WHERE `id`='{$pacient->user_id}' LIMIT 1") or die(mysql_error());
             $row_a = mysql_fetch_assoc($sql_a);
             print '<td><span style="color: green; ">';
-            //echo convertFIO($row_a['surname'],$row_a['name'],$row_a['otchestvo']);
-            echo $row_a['surname'],$row_a['name'],$row_a['otchestvo'];
+            echo convertFIO($row_a['surname'],$row_a['name'],$row_a['otchestvo']);
+            //echo $row_a['surname'],$row_a['name'],$row_a['otchestvo'];
             print '</span></td>';
         }
         print '</tr>';

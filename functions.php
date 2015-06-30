@@ -450,9 +450,7 @@ elseif(strpos($agent,'Trident/7')) return 'ie11';
 // получить ФИО из полного имени
 function convertFIO($f,$i,$o)
 {
-    $result = $f;
-    $result .= substr($i,0,1).'.';
-    $result .= substr($o,0,1).'.';
-    return $result;
+    $sName = $f.' '.$i.' '.$o;
+    return preg_replace('~^(\S++)\s++(\S)\S++\s++(\S)\S++$~u', '$1 $2.$3.', $sName);
 }
 ?>

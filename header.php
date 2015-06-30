@@ -401,10 +401,10 @@ $(document).ready(function() {
 
 function print_ecp($date,$dateformat,$userid)
 {
-  $q = "SELECT * FROM `users` WHERE `id`='{$userid}' LIMIT 1";
+  $q = "SELECT `name`,`surname`,`otchestvo` FROM `users` WHERE `id`='{$userid}' LIMIT 1";
   $s = mysql_query($q) or die(mysql_error());
   $r = mysql_fetch_assoc($s);
- print '<br><div align="center"><div style="background: #f1feff;border-radius: 4px; border: 1px solid #8aacb3;width: 600px;"><div style="display:inline-block;vertical-align:middle;height: 50px;"><img src="'.LPU_HOST.'themes/img/ecp.png"></div><div style="display:inline-block;vertical-align:middle;left: 50px;">Электронно цифровая подпись. Документ подписан и не может быть изменен.<br>Документ подписал(а): '.$r['name'].'<br>
+ print '<br><div align="center"><div style="background: #f1feff;border-radius: 4px; border: 1px solid #8aacb3;width: 600px;"><div style="display:inline-block;vertical-align:middle;height: 50px;"><img src="'.LPU_HOST.'themes/img/ecp.png"></div><div style="display:inline-block;vertical-align:middle;left: 50px;">Электронно цифровая подпись. Документ подписан и не может быть изменен.<br>Документ подписал(а): '.convertFIO($r['surname'],$r['name'],$r['otchestvo']).'<br>
       Дата и время подписания: '.date($dateformat.' H:i',strtotime($date)).'</div></div></div>';
 }
 
