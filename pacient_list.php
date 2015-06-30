@@ -15,18 +15,7 @@ $mounth = array("Январь","Февраль","Март","Апрель","Ма�
 if(isset($_SESSION['user_class']))
 {
     $user = unserialize($_SESSION['user_class']);
-    /*if(isset($_GET['del']))
-    {
-        $query_p = "DELETE FROM `pacient` WHERE `id`='{$_GET['p']}'";
-        $query_d = "DELETE FROM `document` WHERE `id`='{$_GET['d']}'";
-        $query_k = "DELETE FROM `karta` WHERE `id`='{$_GET['k']}'";
-        
-        mysql_query($query_p) or die(mysql_error());
-        mysql_query($query_d) or die(mysql_error());
-        mysql_query($query_k) or die(mysql_error());
-        header('Location: pacient_list.php');
-    }*/
-    
+
     $iswhile = false;
     print_header("Список пациентов");
     print_username();
@@ -42,7 +31,7 @@ if(isset($_SESSION['user_class']))
     print '<table>
       <tr>
 	<td>
-	  <a href="pacient_edit.php"><img src="'.LPU_HOST.'themes/img/new_pacient.png" style="margin: 2px;vertical-align: middle">Новый пациент</a>
+	  <a href="'.LPU_HOST.'pacient_edit.php"><img src="'.LPU_HOST.'themes/img/new_pacient.png" style="margin: 2px;vertical-align: middle">Новый пациент</a>
 	</td>
       </tr>
       </table>';
